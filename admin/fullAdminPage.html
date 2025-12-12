@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h2>Administraatori leht</h2>
+
+    <label for="param1">Kella põhine foori töö:</label>
+    <select id="param1">
+      <option value="0">Ignoreeri kella aega</option>
+      <option value="1">Vilkuv kollane valitud perioodil</option>
+    </select>
+    <br><br>
+
+    <label for="param2">Sisesta kella aeg, alates millest on fooril määratud funktsioon (tundide kaupa):</label>
+    <input type="number" id="param2" min="0" max="23" placeholder="Sisestage number 0-23">
+    <br><br>
+
+    <label for="param3">Sisesta kella aeg, peale mida lõppeb fooril määratud funktsioon (tundide kaupa):</label>
+    <input type="number" id="param3" min="0" max="23" placeholder="Sisestage number 0-23">
+    <br><br>
+
+    <label for="param4">Nädalapäeva põhine foori töö:</label>
+    <select id="param4">
+        <option value="0">Ignoreeri nädalapäeva</option>
+        <option value="1">Vilkuv kollane valitud perioodil</option>
+    </select>
+    <br><br>
+
+    <label for="param5">Nädalapäeva algus, kus on fooril määratud funktsioon:</label>
+    <select id="param5">
+        <option value="1">Esmaspäev</option>
+        <option value="2">Teisipäev</option>
+        <option value="3">Kolmapäev</option>
+        <option value="4">Neljapäev</option>
+        <option value="5">Reede</option>
+        <option value="6">Laupäev</option>
+        <option value="7">Pühapäev</option>
+    </select>
+    <br><br>
+
+    <label for="param6">Nädalapäeva lõpp, kus on fooril teine funktsioon:</label>
+    <select id="param6">
+        <option value="1">Esmaspäev</option>
+        <option value="2">Teisipäev</option>
+        <option value="3">Kolmapäev</option>
+        <option value="4">Neljapäev</option>
+        <option value="5">Reede</option>
+        <option value="6">Laupäev</option>
+        <option value="7">Pühapäev</option>
+    </select>
+    <br><br>
+
+    <label for="param7">Lisa sektsiooni tuli:</label>
+    <select id="param7">
+        <option value="0">Ei põle</option>
+        <option value="1">Põleb</option>
+        <option value="2">Üle ühe</option>
+    </select>
+    <br><br>
+
+    <button onclick="sendParams()">Uuenda foori</button>
+
+    <script>
+      function sendParams() {
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbx72OwGkiOCpnNqV8RQ7rqoaegoT3vSt-bqa9vy0SZdCrMQaCqf1WmstHAjEkVL4X6M-g/exec";
+
+        const p1 = document.getElementById('param1').value;
+        const p2 = Number(document.getElementById('param2').value);
+        const p3 = Number(document.getElementById('param3').value);
+        const p4 = document.getElementById('param4').value;
+        const p5 = document.getElementById('param5').value;
+        const p6 = document.getElementById('param6').value;
+        const p7 = document.getElementById('param7').value;
+
+        const numericParams = [p2, p3];
+        for (let n of numericParams) {
+          if (!Number.isInteger(n)) {
+            alert("Sisestada number");
+            return;
+          }
+        }
+
+        const url = `${webAppUrl}?time=${p1}&timeStart=${p2}&timeEnd=${p3}&day=${p4}&dayStart=${p5}&dayEnd=${p6}&turnlight=${p7}`;
+
+        fetch(url)
+          .catch(error => console.error("Error calling web app:", error));
+      }
+    </script>
+  </body>
+</html>
