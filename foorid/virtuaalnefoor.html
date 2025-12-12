@@ -16,6 +16,8 @@
     }
 </style>
 <script>
+    const link = "Siia sisestada trafficlight scripti link"
+    
     const start = Date.now();
     
     // Kui kau kestab uks tsukkel, seadistatud labi Drive'i
@@ -154,7 +156,7 @@
         document.getElementById("red").style.backgroundColor = "red";
         document.getElementById("redCivil").style.backgroundColor = "red";
         kysiKonf();
-        fetch("https://script.google.com/macros/s/AKfycbz-vlGaB9c_EOjj9Hauw2_5UMO8X4Ck5fk75rUCHt_6rPVLueJr3KMaCaz_BuU0S5M3/exec").then(d => d.json()).then(edasi);
+        fetch(link).then(d => d.json()).then(edasi);
         setInterval(kysiKonf, 10000);
     }
 
@@ -164,7 +166,7 @@
     }
     
     function kysiKonf(){
-        fetch("https://script.google.com/macros/s/AKfycbz-vlGaB9c_EOjj9Hauw2_5UMO8X4Ck5fk75rUCHt_6rPVLueJr3KMaCaz_BuU0S5M3/exec?foorinr=1"
+        fetch(link
         ).then(d => d.json()).then(salvestaKonf);
     }
     
