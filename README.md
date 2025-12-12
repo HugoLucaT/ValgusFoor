@@ -27,3 +27,6 @@ Kontrollerid/URL foorid pärivad serverist aja ja konfiguratsiooni sätted.
 Server saab muutujate väärtused google sheets lehelt ja saadab kontrolleritele/URL fooridele.
 Seadete muutmisel admin lehel saadetakse uued väärtused serverisse.
 Server kirjutab uued väärtused google sheets tabelisse.
+
+<img width="1007" height="682" alt="image" src="https://github.com/user-attachments/assets/3353e8f7-7098-40a5-9a58-9d4308ff679b" />
+
