@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+<head>
+<style>
+    .container {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100px;
+    }
+    tr {
+        height: 100px;
+    }
+</style>
+<script>
+    const start = Date.now();
+    
+    // Kui kau kestab uks tsukkel, seadistatud labi Drive'i
+    let kestus = 0;
+    // Kaua kestab kollane tuli
+    const yellowLenght = 1000;
+    // Mitu korda vilgub roheline tuli
+    const maxBlinks = 8;
+    // Kaua kestab 1 vilkumine (millisekundites)
+    const blinkGap = 500;
+    //Millal algab foori tsukkel
+    let foorinihe = 0;
+    // Kui suur on vahe autode tule kustumisel ja jalakaijate foori suttimisel ja vastupidi (millisekundites)
+    const gapBetweenCycles = 5000;
+    // Kui palju aega kulub nii kollastele tuledele kui ka rohelise vilkumisele (foori kestus seda ei mojuta, millisekundites)
+    const setTimes = yellowLenght*2 + maxBlinks*blinkGap;
+
+    //Reseti controller
+    let dOld = null;
+    
+    
+    
+    let intervals = new Set();
+    let timeouts = new Set();
+    let running = true;
+
+    function addInterval(fn, ms) {
+        const id = setInterval(() => { if (running) fn(); }, ms);
+        intervals.add(id);
+        return id;
+    }
+
+    function addTimeout(fn, ms) {
+        const id = setTimeout(() => { if (running) fn(); }, ms);
+        timeouts.add(id);
+        return id;
+    }
+
+    function resetAll() {
+        intervals.forEach(id => clearInterval(id));
+        intervals.clear();
+
+        timeouts.forEach(id => clearTimeout(id));
+        timeouts.clear();
+
+        running = false;
+        setTimeout(() => running = true, 50);
+
+        document.getElementById("red").style.backgroundColor = "red";
+        document.getElementById("yellow").style.backgroundColor = "white";
+        document.getElementById("green").style.backgroundColor = "white";
+        document.getElementById("redCivil").style.backgroundColor = "red";
+        document.getElementById("greenCivil").style.backgroundColor = "white";
+    }
+
+    
+    
+    
+    function civilRedLight(redCivil, greenCivil, greenEl, yellowEl, redEl){
+        greenCivil.style.backgroundColor = "white";
+        redCivil.style.backgroundColor = "red";
+        addTimeout(() => redYellowLight(greenEl, yellowEl, redEl), gapBetweenCycles);
+    }
+
+    function civilGreenLight(redCivil, greenCivil){
+        greenCivil.style.backgroundColor = "green";
+        redCivil.style.backgroundColor = "white";
+
+    }
+
+    function civilBlinkingGreenLight(redCivil, greenCivil, greenEl, yellowEl, redEl){
+        redCivil.style.backgroundColor = "white";
+        let blinkCount = 0;
+        let isOn = true;
+        const blinkInterval = addInterval(() => {
+            if (isOn) {
+                greenCivil.style.backgroundColor = "white";
+            } else {
+                greenCivil.style.backgroundColor = "green";
+            }
+            isOn = !isOn;
+            blinkCount++;
+
+            if (blinkCount >= maxBlinks) {
+                clearInterval(blinkInterval);
+                civilRedLight(redCivil, greenCivil, greenEl, yellowEl, redEl);
+            }
+        }, blinkGap);
+    }
+
+    function redYellowLight(greenEl ,yellowEl, redEl) {
+        yellowEl.style.backgroundColor = "yellow";
+        addTimeout(() => greenLight(greenEl, yellowEl, redEl), yellowLenght);
+    }
+
+    function greenLight(greenEl, yellowEl, redEl) {
+        yellowEl.style.backgroundColor = "white";
+        redEl.style.backgroundColor = "white";
+        greenEl.style.backgroundColor = "green";
+    }
+
+    function blinkingGreenLight(greenEl, yellowEl, redEl, redCivilLight, greenCivilLight) {
+        redEl.style.backgroundColor = "white";
+        let blinkCount = 0;
+        let isOn = true;
+        const blinkInterval = addInterval(() => {
+            if (isOn) {
+                greenEl.style.backgroundColor = "white";
+            } else {
+                greenEl.style.backgroundColor = "green";
+            }
+            isOn = !isOn;
+            blinkCount++;
+
+            if (blinkCount >= maxBlinks) {
+                clearInterval(blinkInterval);
+                yellowLight(greenEl, yellowEl, redEl,  redCivilLight, greenCivilLight);
+            }
+        }, blinkGap);
+    }
+
+    function yellowLight(greenEl, yellowEl, redEl, redCivilLight, greenCivilLight) {
+        greenEl.style.backgroundColor = "white";
+        yellowEl.style.backgroundColor = "yellow";
+
+        addTimeout(() => redLight(greenEl, yellowEl, redEl, redCivilLight, greenCivilLight), yellowLenght);
+    }
+
+    function redLight(greenEl, yellowEl, redEl, redCivilLight, greenCivilLight) {
+        yellowEl.style.backgroundColor = "white";
+        redEl.style.backgroundColor = "red";
+        addTimeout(() => civilGreenLight(redCivilLight, greenCivilLight), gapBetweenCycles)
+    }
+
+    function algus() {
+        document.getElementById("red").style.backgroundColor = "red";
+        document.getElementById("redCivil").style.backgroundColor = "red";
+        kysiKonf();
+        fetch("https://script.google.com/macros/s/AKfycbz-vlGaB9c_EOjj9Hauw2_5UMO8X4Ck5fk75rUCHt_6rPVLueJr3KMaCaz_BuU0S5M3/exec").then(d => d.json()).then(edasi);
+        setInterval(kysiKonf, 10000);
+    }
+
+    
+    function edasi(d){
+        setInterval(kuvaAeg, 1000);
+    }
+    
+    function kysiKonf(){
+        fetch("https://script.google.com/macros/s/AKfycbz-vlGaB9c_EOjj9Hauw2_5UMO8X4Ck5fk75rUCHt_6rPVLueJr3KMaCaz_BuU0S5M3/exec?foorinr=1"
+        ).then(d => d.json()).then(salvestaKonf);
+    }
+    
+    function salvestaKonf(d){
+        console.log(d);
+        kestus=(d[0]*1000) - setTimes;
+        console.log(kestus);
+        foorinihe=d[1]*1000;
+        if (dOld && (dOld[0] !== d[0] || dOld[1] !== d[1])) {
+            resetAll();
+        }
+        dOld = [...d];
+
+    }
+    
+    function kuvaAeg(){
+        let current = Date.now() - start;
+        const greenEl = document.getElementById("green");
+        const yellowEl = document.getElementById("yellow");
+        const redEl = document.getElementById("red");
+        const redCivil = document.getElementById("redCivil");
+        const greenCivil = document.getElementById("greenCivil");
+        if(kestus != 0){
+            let time = parseInt(((start + current + foorinihe)/1000) % ((kestus+setTimes)/1000));
+            console.log(time);
+            if(time == parseInt(((kestus + setTimes)/2 + gapBetweenCycles)/1000)){
+                civilBlinkingGreenLight(redCivil, greenCivil, greenEl, yellowEl, redEl);
+            }
+            else if(time == 0){
+                blinkingGreenLight(greenEl, yellowEl, redEl, redCivil, greenCivil);
+            }
+        } else {
+            redLight(greenEl, yellowEl, redEl);
+        }
+    }
+</script>
+</head>
+<body onload="algus()">
+    <div class="container">
+        <table border="1">
+            <tr id="red"><td></td></tr>
+            <tr id="yellow"><td></td></tr>
+            <tr id="green"><td></td></tr>
+        </table>
+        <table border="1">
+            <tr id="redCivil"><td></td></tr>
+            <tr id="greenCivil"><td></td></tr>
+        </table>
+    </div>
+</body>
+</html>
