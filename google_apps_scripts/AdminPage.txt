@@ -1,0 +1,53 @@
+function doGet(e) {
+  const sheet = SpreadsheetApp.openById("Siia sisestada config tabeli id").getSheets()[0];
+  const logsheet = SpreadsheetApp.openById("Siia sisestada logi tabeli id").getSheets()[0];
+
+  const date = new Date();
+
+  const lastRow = logsheet.getLastRow();
+  const firstEmptyRow = lastRow + 1;
+
+  logsheet.getRange(firstEmptyRow, 1).setValue(date);
+
+
+  if (e.parameter.time) {
+    sheet.getRange(7, 2).setValue(e.parameter.time);
+    logupdate(logsheet, firstEmptyRow, 2, e.parameter.time);
+
+    if (e.parameter.timeStart) {
+      sheet.getRange(8, 2).setValue(e.parameter.timeStart);
+      logupdate(logsheet, firstEmptyRow, 3, e.parameter.timeStart);
+    }
+    if (e.parameter.timeEnd) {
+      sheet.getRange(9, 2).setValue(e.parameter.timeEnd);
+      logupdate(logsheet, firstEmptyRow, 4, e.parameter.timeEnd);
+    }
+  }
+
+  if (e.parameter.day) {
+    sheet.getRange(10, 2).setValue(e.parameter.day);
+    logupdate(logsheet, firstEmptyRow, 5, e.parameter.day);
+
+    if (e.parameter.dayStart) {
+      sheet.getRange(11, 2).setValue(e.parameter.dayStart);
+      logupdate(logsheet, firstEmptyRow, 6, e.parameter.dayStart);
+    }
+    if (e.parameter.dayEnd) {
+      sheet.getRange(12, 2).setValue(e.parameter.dayEnd);
+      logupdate(logsheet, firstEmptyRow, 7, e.parameter.dayEnd);
+    }
+  }
+
+  if (e.parameter.turnlight) {
+    sheet.getRange(13, 2).setValue(e.parameter.turnlight);
+    logupdate(logsheet, firstEmptyRow, 8, e.parameter.turnlight);
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify("Result"))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function logupdate(logsheet, row, col, value) {
+  logsheet.getRange(row, col).setValue(value);
+}

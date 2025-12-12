@@ -1,0 +1,32 @@
+function doGet(e) {
+  const sheet = SpreadsheetApp.openById("Siia sisestada config tabeli id"").getSheets()[0];
+  const logsheet = SpreadsheetApp.openById("Siia sisestada logi tabeli id").getSheets()[0];
+  
+  var lastColumn = sheet.getLastColumn();
+  const table = sheet.getRange(1, 1, 13, lastColumn).getValues();
+  const date = new Date();
+
+  const lastRow = logsheet.getLastRow();  
+  const firstEmptyRow = lastRow + 1;
+
+  logsheet.getRange(firstEmptyRow, 1).setValue(date);
+  if (e.parameter.foorinr) {
+    const foorNr = parseInt(e.parameter.foorinr);
+    
+
+    const result = [table[4][1], table[1][foorNr], date.getTime(), date.getHours(), date.getDay(), table[6][1], table[7][1], table[8][1], table[9][1], table[10][1], table[11][1], table[12][1]]; 
+    return ContentService
+      .createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+
+  const allLights = [];
+  for (let i = 1; i <= lastColumn - 1; i++) {
+    allLights.push([table[4][1], table[1][i], date.getTime(), date.getHours(), date.getDay(), table[6][1], table[7][1], table[8][1], table[9][1], table[10][1], table[11][1], table[12][1]]);
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify(allLights))
+    .setMimeType(ContentService.MimeType.JSON);
+}
