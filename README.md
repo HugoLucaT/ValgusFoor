@@ -1,12 +1,13 @@
 # ValgusFoor
 Tarkvara loodud Tallinna Ülikooli Asjade interneti tunni raames.
-TARKVARA STRUKTUURI KIRJELDUS
+
+## TARKVARA STRUKTUURI KIRJELDUS
 
 virtuaalnefoor.html - virtuaalse foori browseri fail
 fullAdminPage.html - administraatori leht
 fyysilinefoor.ino - füüsilise foori kood
 
-INSTALLIMISJUHIS
+## INSTALLIMISJUHIS
 
 Kopeeri Git repositoorium kohalikku masinasse
 Loo Google Apps Scripti kaks uut skripti ja kopeeri sisu Adminpage.txt ja TrafficLight.txt failidest.
@@ -18,10 +19,10 @@ fyysilinefoor.ino - rida 16
 Lae kood kontrollerile: Kasuta koodi laadimiseks Arduino IDE või muu tarkvarage.
 
 
-LIIKLUSKORRALDUS
+## LIIKLUSKORRALDUS
 Foor on mõeldud kasutuseks ristmikul.
 
-ANDMEVAHETUSE KIRJELDUS
+## ANDMEVAHETUSE KIRJELDUS
 Kontrollerid/URL foorid pärivad serverist aja ja konfiguratsiooni sätted.
 Server saab muutujate väärtused google sheets lehelt ja saadab kontrolleritele/URL fooridele.
 Seadete muutmisel admin lehel saadetakse uued väärtused serverisse.
