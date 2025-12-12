@@ -13,7 +13,7 @@
 
 ESP8266WiFiMulti WiFiMulti;
 
-
+String site = "Siia sisestada trafficlight scripti link"
 
 const int RED = D0;
 const int YELLOW = D1;
@@ -113,7 +113,7 @@ void yellowBlinking(){
   civilOff();
   blinkLight(YELLOW, maxBlinks);
   if(yellowCount >= 15){
-    connect("https://script.google.com/macros/s/AKfycbyyVV-ThzEI5TGvOtGYeaMGslrUpKdnkVkn-b92wearQmHvNTdv-ZGB3_ZSEjDiuefF7A/exec?foorinr=1");
+    connect(site);
     yellowCount = 0;
   } else {
     yellowCount++;
@@ -173,7 +173,7 @@ void runCycle() {
     redLight();
     delay(gapBetweenCycles);
     civilGreen();
-    connect("https://script.google.com/macros/s/AKfycbyyVV-ThzEI5TGvOtGYeaMGslrUpKdnkVkn-b92wearQmHvNTdv-ZGB3_ZSEjDiuefF7A/exec?foorinr=1");
+    connect(site);
   }
 
   if (ts == civilBlinkStart) {
@@ -217,7 +217,7 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP(STASSID, STAPSK);
 
-  connect("https://script.google.com/macros/s/AKfycbyyVV-ThzEI5TGvOtGYeaMGslrUpKdnkVkn-b92wearQmHvNTdv-ZGB3_ZSEjDiuefF7A/exec?foorinr=1");
+  connect(site);
   lastMillis = millis();
 }
 
